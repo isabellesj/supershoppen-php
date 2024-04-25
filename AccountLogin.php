@@ -55,14 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <br />
                         <button type="submit" class="newsletter-btn"><i class="fa fa-envelope"></i>Login</button>
                     </form>
-                    <a href="">Lost password?</a>
+                    <a href="/forgotPassword">Lost password?</a>
                 </div>
             </div>
         </div>
 
 
     </div>
-
-
     </p>
 </body>

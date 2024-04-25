@@ -3,7 +3,6 @@ require_once ('vendor/autoload.php');
 require_once ('Models/UserDatabase.php');
 require_once ('Models/User.php');
 
-
 class DBContext
 {
 
@@ -29,17 +28,24 @@ class DBContext
         $this->initIfNotInitialized();
     }
 
-    function initIfNotInitialized()
+    function addUser($UserName, $Name, $StreetAddress, $City, $ZipCode, $EmailAddress)
     {
+        // $userId = $this->usersDatabase->getAuth()->admin()->createUser($UserName, $Password, $EmailAddress);
 
-        static $initialized = false;
-        if ($initialized)
-            return;
 
-        $this->usersDatabase->setupUsers();
-        $this->usersDatabase->seedUsers();
+        $prep = $this->pdo->prepare("INSERT INTO UserDetails
+                        (FullName, StreetAddress, City, ZipCode, UserName)
+                    VALUES(:FullName, :StreetAddress, :City, :ZipCode, :UserName);
+        ");
+        $prep->execute([
+            "FullName" => $Name,
+            "StreetAddress" => $StreetAddress,
+            "City" => $City,
+            "ZipCode" => $ZipCode,
+            "UserName" => $UserName
+        ]);
+        return $this->pdo->lastInsertId();
 
-        $initialized = true;
     }
 
     function getAllUsers()
@@ -48,19 +54,29 @@ class DBContext
 
     }
 
-    // function getUser($id)
-    // {
-    //     $prep = $this->pdo->prepare('SELECT * FROM products where id=:id');
-    //     $prep->setFetchMode(PDO::FETCH_CLASS, 'User');
-    //     $prep->execute(['id' => $id]);
-    //     return $prep->fetch();
-    // }
-    // function getProductByUsername($username)
-    // {
-    //     $prep = $this->pdo->prepare('SELECT * FROM products where username=:username');
-    //     $prep->setFetchMode(PDO::FETCH_CLASS, 'User');
-    //     $prep->execute(['username' => $username]);
-    //     return $prep->fetch();
-    // }
+    function initIfNotInitialized()
+    {
+
+        static $initialized = false;
+        if ($initialized)
+            return;
+
+        $sql = "CREATE TABLE IF NOT EXISTS `UserDetails` (
+                `id` INT AUTO_INCREMENT NOT NULL,
+                `FullName` varchar(200) NOT NULL,
+                `StreetAddress` varchar(200) NOT NULL,
+                `City` varchar(200) NOT NULL,
+                `ZipCode` INT,
+                `UserName` varchar(200) NOT NULL,
+                PRIMARY KEY (`id`)
+                ) ";
+
+        $this->pdo->exec($sql);
+
+        $this->usersDatabase->setupUsers();
+        $this->usersDatabase->seedUsers();
+
+        $initialized = true;
+    }
 }
 ?>

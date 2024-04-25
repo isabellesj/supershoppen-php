@@ -7,7 +7,7 @@ require_once ("Models/Database.php");
 
 if (!isset($TPL)) {
     $TPL = new PageTemplate();
-    $TPL->PageTitle = "Login";
+    $TPL->PageTitle = "Login out";
     $TPL->ContentBody = __FILE__;
     include "layout.php";
     exit;
