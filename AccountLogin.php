@@ -21,15 +21,21 @@ $username = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $timestamp = date("Y-m-d H:i:s");
+    $ip = $_SERVER['REMOTE_ADDR'];
+
     try {
         $dbContext->getUsersDatabase()->getAuth()
             ->login($username, $password);
+        $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+        $dbContext->addLoginSession($userId, $timestamp, $ip);
         header('Location: /');
         exit;
     } catch (Exception $e) {
         $message = "Could not login";
     }
 }
+
 ?>
 
 <body>
@@ -37,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo $dbContext->getUsersDatabase()->getAuth()->isLoggedIn();
     ?>
 
-    <p>
     <div class="row">
 
         <div class="row">
@@ -55,12 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <br />
                         <button type="submit" class="newsletter-btn"><i class="fa fa-envelope"></i>Login</button>
                     </form>
-                    <a href="/forgotPassword">Lost password?</a>
+                    <a href="/forgotPassword.php">Lost password?</a>
                 </div>
             </div>
         </div>
 
 
     </div>
-    </p>
 </body>

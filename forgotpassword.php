@@ -1,10 +1,22 @@
 <?php
-require_once ('vendor/autoload.php');
-require_once ('Models/Database.php');
+ob_start();
 
-$q = $_GET['q'] ?? "";
+require 'vendor/autoload.php';
+require_once ('Models/Database.php');
+require_once ('lib/PageTemplate.php');
+
+if (!isset($TPL)) {
+    $TPL = new PageTemplate();
+    $TPL->PageTitle = "Login";
+    $TPL->ContentBody = __FILE__;
+    include "layout.php";
+    exit;
+}
 
 $dbContext = new DbContext();
+$username = "";
+$password = "";
+$passwordAgain = "";
 $message = "";
 $resetOk = false;
 
@@ -14,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $expirationTime = 86400;
 
-        $dbContext->getUsersDatabase()->getAuth()->forgotPassword($_POST['username'], function ($selector, $token) use ($expirationTime) {
+        $dbContext->getUsersDatabase()->getAuth()->forgotPassword($_POST['username'], function ($selector, $token) {
             $mail = new PHPMailer\PHPMailer\PHPMailer(true);
             $mail->isSMTP();
             $mail->Host = 'smtp.ethereal.email';
@@ -26,18 +38,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             //det här ska finnas i .env
 
-            $mail->From = "noreply@chefschoice.com";
-            $mail->FromName = "Chef";
+            $mail->From = "noreply@stefanssupershop.com";
+            $mail->FromName = "Stefans Supershop";
             $mail->addAddress($_POST['username']);
-            $mail->addReplyTo("reset@chefschoice.com", "No-Reply");
             $mail->isHTML(true);
-            $mail->Subject = "Chef's Choice - reset password";
-            $url = 'http://localhost:8000/user/resetPassword?selector=' . \urlencode($selector) . '&token=' . \urlencode($token);
+            $mail->Subject = "Stefans Supershop - reset password";
+            $url = 'http://localhost:8000/resetPassword.php?selector=' . \urlencode($selector) . '&token=' . \urlencode($token)
+            ;
             $mail->Body = "
             <h2>Password reset</h2>
             <p>If you've lost your password or wish to reset it, click here: <a href='$url'>$url'></a> to get started</p>";
             $mail->send();
-        }, $expirationTime);
+        });
+
         $resetOk = true;
     } catch (\Delight\Auth\InvalidEmailException $e) {
         $message = "Invalid email address";
@@ -53,19 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>Chef's Choice</title>
-    <script src="https://kit.fontawesome.com/2471abcbe0.js" crossorigin="anonymous"></script>
-    <link href="/css/style.css" rel="stylesheet" />
-</head>
 
 <body>
     <main>
@@ -85,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <h2>Forgot password:
                             <?php echo $message; ?>
                         </h2>
-                        <a class="cancel__link" href="/user/login"><i class="fa-solid fa-xmark"></i></a>
                     </div>
                     <form method="post" class="form">
                         <div class="username__wrapper">

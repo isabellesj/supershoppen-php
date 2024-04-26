@@ -30,8 +30,6 @@ class DBContext
 
     function addUser($UserName, $Name, $StreetAddress, $City, $ZipCode, $EmailAddress)
     {
-        // $userId = $this->usersDatabase->getAuth()->admin()->createUser($UserName, $Password, $EmailAddress);
-
 
         $prep = $this->pdo->prepare("INSERT INTO UserDetails
                         (FullName, StreetAddress, City, ZipCode, UserName)
@@ -43,6 +41,22 @@ class DBContext
             "City" => $City,
             "ZipCode" => $ZipCode,
             "UserName" => $UserName
+        ]);
+        return $this->pdo->lastInsertId();
+
+    }
+
+    function addLoginSession($userId, $timestamp, $ip)
+    {
+
+        $prep = $this->pdo->prepare("INSERT INTO LoginSession
+                        (userId, timestamp, ip)
+                    VALUES(:userId, :timestamp, :ip);
+        ");
+        $prep->execute([
+            "userId" => $userId,
+            "timestamp" => $timestamp,
+            "ip" => $ip
         ]);
         return $this->pdo->lastInsertId();
 
@@ -70,6 +84,14 @@ class DBContext
                 `UserName` varchar(200) NOT NULL,
                 PRIMARY KEY (`id`)
                 ) ";
+
+        $sql = "CREATE TABLE IF NOT EXISTS `LoginSession` (
+               `id` INT AUTO_INCREMENT NOT NULL,
+               `userId` INT NOT NULL,
+               `timestamp` TIMESTAMP NOT NULL,
+               `ip` VARBINARY(16) NOT NULL,
+               PRIMARY KEY (`id`)
+               ) ";
 
         $this->pdo->exec($sql);
 

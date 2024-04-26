@@ -36,7 +36,7 @@ $dbContext = new DbContext();
             <div class="container">
                 <ul class="header-links pull-left">
                     <li><a href="#"><i class="fa fa-phone"></i> +46-111-22-33</a></li>
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+                    <li><a href="#"><i class="fa fa-envelope-o"></i> stefanssupershop@email.com</a></li>
                     <li><a href="#"><i class="fa fa-map-marker"></i> Testgatan 122</a></li>
                 </ul>
                 <ul class="header-links pull-right">
@@ -44,10 +44,7 @@ $dbContext = new DbContext();
                         <?php
                         if ($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) { ?>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" href="/Account/Manage" title="Manage">Hello
-                                    <!-- <?php foreach ($dbContext->getAllUsers() as $user) {
-                                        echo $user->username;
-                                    } ?> -->
+                                <a class="nav-link text-dark" href="/Account/Manage" title="Manage">Welcome!
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" href="/AccountLogout.php" title="Manage">Logout</a>
