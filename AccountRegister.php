@@ -1,7 +1,6 @@
 <?php
 ob_start();
 require_once ('lib/PageTemplate.php');
-require_once ("Functions/email.php");
 require_once ("Utils/Validator.php");
 
 $token = $_GET['token'] ?? "";
@@ -26,7 +25,6 @@ $StreetAddress = "";
 $ZipCode = "";
 $City = "";
 
-$user = new User();
 $v = new Validator($_POST);
 $registeredOk = false;
 
@@ -38,11 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $StreetAddress = $_POST['StreetAddress'];
     $City = $_POST['City'];
     $ZipCode = $_POST['ZipCode'];
-
-    $user->FullName = $_POST['Name'];
-    $user->StreetAddress = $_POST['StreetAddress'];
-    $user->City = $_POST['City'];
-    $user->ZipCode = $_POST['ZipCode'];
 
     $v->field('Name')->required()->alpha([' '])->min_len(1)->max_len(200);
     $v->field('username')->required()->email();

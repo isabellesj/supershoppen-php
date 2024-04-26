@@ -1,7 +1,6 @@
 <?php
 require_once ('vendor/autoload.php');
 require_once ('Models/UserDatabase.php');
-require_once ('Models/User.php');
 
 class DBContext
 {
@@ -59,12 +58,6 @@ class DBContext
             "ip" => $ip
         ]);
         return $this->pdo->lastInsertId();
-
-    }
-
-    function getAllUsers()
-    {
-        return $this->pdo->query('SELECT * FROM users')->fetchAll(PDO::FETCH_CLASS, 'User');
 
     }
 
