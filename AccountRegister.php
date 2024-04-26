@@ -46,18 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($v->is_valid()) {
         try {
-            $userId = $dbContext->getUsersDatabase()->getAuth()->register($username, $password, $username, function ($selector, $token) use ($dbContext, $username, $Name, $StreetAddress, $City, $ZipCode) {
+            $Username = $_ENV['Username'];
+            $Password = $_ENV['Password'];
+
+            $userId = $dbContext->getUsersDatabase()->getAuth()->register($username, $password, $username, function ($selector, $token) use ($dbContext, $username, $Name, $StreetAddress, $City, $ZipCode, $Username, $Password) {
 
                 $mail = new PHPMailer\PHPMailer\PHPMailer(true);
                 $mail->isSMTP();
                 $mail->Host = 'smtp.ethereal.email';
                 $mail->SMTPAuth = true;
-                $mail->Username = 'virginia91@ethereal.email';
-                $mail->Password = 'VjQ1fE6EyXT6VhaEAR';
+                $mail->Username = $Username;
+                $mail->Password = $Password;
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
-
-                //det här ska finnas i .env
 
                 $mail->From = "noreply@stefanssupershop.com";
                 $mail->FromName = "Stefans Supershop";

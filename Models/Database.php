@@ -1,6 +1,8 @@
 <?php
 require_once ('vendor/autoload.php');
 require_once ('Models/UserDatabase.php');
+require_once ('Models/Database.php');
+
 
 class DBContext
 {
@@ -21,6 +23,8 @@ class DBContext
         $db = $_ENV['db'];
         $user = $_ENV['user'];
         $pass = $_ENV['pass'];
+        $Username = $_ENV['Username'];
+        $Password = $_ENV['Password'];
         $dsn = "mysql:host=$host;dbname=$db";
         $this->pdo = new PDO($dsn, $user, $pass);
         $this->usersDatabase = new UserDatabase($this->pdo);
