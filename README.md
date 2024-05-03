@@ -1,6 +1,6 @@
 FÖR GODKÄNT 
 
-1. Skapa eget repsitory på Github. Det ska vara PRIVAT. stefan.holmberg@systementor.se ska bjudas in som collaborator. Ange URL till ditt repository i StudentPortalen.
+1. Skapa eget repsitory på Github. Det ska vara PRIVAT. 
 2. Skapa och använd en normaliserad MySQL databas som hanterar användare. . I ditt projekt skall en .SQL fil med Create Table statement finnas
 3. Användarnamn (epost), lösenord, gatuaddress, postort, stad skall lagras för varje kund. Användarnamn (=epost) och lösenord skall hanteras och lagras korrekt
 4. Man ska på sajten kunna skapa nytt konto (registrera sig som en ny användare).
